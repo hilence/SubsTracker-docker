@@ -160,6 +160,10 @@ node --import ./src/server/register-loaders.mjs src/server/index.js
 
 包含快速开始、ARM64 说明、配置、数据持久化与备份、架构对照、本地开发、常见问题等完整文档。
 
+### 9. `OLD_DOCKER.md` — 原项目 部署文档
+
+已采取“双轨兼容”模式，保留所有 Cloudflare 文件，仓库同时支持 Cloudflare Workers 和 Docker 两种部署方式。
+
 ## 五、修改文件
 
 ### `package.json`
