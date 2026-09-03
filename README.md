@@ -293,3 +293,13 @@ docker restart substracker
 5. **env 注入方式**：`@hono/node-server` 不自动注入 env，通过 `fetch: (req) => app.fetch(req, env)` 手动传递 KV 绑定
 6. **tini 作为 init 进程**：确保容器内信号正确转发，优雅关闭时 KV 数据能落盘
 7. **原子写入**：KV 落盘采用写 `.tmp` → `rename` 模式，防止进程崩溃导致数据文件损坏
+
+---
+
+## 致谢
+
+本项目基于 [wangwangit/SubsTracker](https://github.com/wangwangit/SubsTracker/) 迁移而来，感谢原作者的开源贡献。
+
+## 许可证
+
+MIT License
