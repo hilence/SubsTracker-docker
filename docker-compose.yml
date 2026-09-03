@@ -1,0 +1,47 @@
+# SubsTracker — Docker Compose 部署
+#
+# 用法：
+#   docker compose up -d          # 启动
+#   docker compose logs -f        # 查看日志
+#   docker compose down           # 停止
+#   docker compose pull && docker compose up -d   # 更新
+#
+# 数据持久化：named volume substracker-data → 容器内 /data
+# 备份：docker run --rm -v substracker-data:/data -v $(pwd):/backup alpine cp /data/kv.json /backup/
+
+services:
+  substracker:
+    # 多架构镜像：自动适配 ARM64 / AMD64
+    # 如需在 ARM64 机器上构建：docker buildx build --platform linux/arm64 -t substracker .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # 若使用预构建镜像，取消注释并替换为你的镜像名：
+    # image: substracker:latest
+
+    container_name: substracker
+    restart: unless-stopped
+
+    ports:
+      - "${PORT:-3000}:3000"
+
+    volumes:
+      - substracker-data:/data
+
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATA_DIR=/data
+      # 定时任务 cron 表达式（UTC），默认每小时整点
+      - CRON_SCHEDULE=0 * * * *
+
+    # 健康检查由 Dockerfile 内置，此处可覆盖间隔
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  substracker-data:

@@ -1,0 +1,38 @@
+{
+  "name": "subscription-manager",
+  "version": "3.0.0",
+  "description": "订阅管理系统 - 基于 Cloudflare Workers + Hono",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required for Workers runtime'",
+    "setup": "node scripts/setup-kv.cjs",
+    "deploy": "npx wrangler deploy",
+    "deploy:safe": "npm run setup && npm run deploy",
+    "start": "node --import ./src/server/register-loaders.mjs src/server/index.js",
+    "start:dev": "DATA_DIR=./.data PORT=3000 node --import ./src/server/register-loaders.mjs src/server/index.js",
+    "lint": "tsc --noEmit -p jsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.6.14",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "typescript": "^5.7.2",
+    "vitest": "~2.1.9",
+    "wrangler": "^3.99.0"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "subscription-management",
+    "notification",
+    "lunar-calendar",
+    "hono"
+  ],
+  "license": "MIT"
+}
